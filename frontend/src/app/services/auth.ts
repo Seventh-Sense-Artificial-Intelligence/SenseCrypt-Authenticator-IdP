@@ -12,6 +12,7 @@ export interface UserProfile {
   id: string;
   email: string;
   full_name: string;
+  company: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -33,8 +34,8 @@ export class AuthService {
     );
   }
 
-  register(full_name: string, email: string, password: string) {
-    return this.api.post<{ message: string }>('/auth/register', { email, password, full_name });
+  register(full_name: string, email: string, password: string, company?: string) {
+    return this.api.post<{ message: string }>('/auth/register', { email, password, full_name, company: company || null });
   }
 
   verifyEmail(token: string) {

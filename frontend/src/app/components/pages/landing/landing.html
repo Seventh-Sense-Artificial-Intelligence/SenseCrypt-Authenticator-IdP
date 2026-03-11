@@ -28,7 +28,7 @@
     <div class="flex items-center gap-3">
       <!-- Theme toggle -->
       <button (click)="theme.toggle()"
-              class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-gold transition">
+              class="w-9 h-9 rounded-full border border-white/50 flex items-center justify-center text-white/60 hover:border-gold hover:text-gold hover:-translate-y-px transition">
         @if (theme.theme() === 'light') {
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
         } @else {
@@ -36,18 +36,18 @@
         }
       </button>
       <button (click)="openModal('login')"
-              class="inline-flex items-center justify-center px-5 py-2 font-semibold text-xs tracking-wider uppercase rounded-full border border-white/30 text-white/80 hover:border-gold hover:text-gold transition">Sign In</button>
-      <button (click)="openModal('register')" class="btn-gradient text-xs">Get Started</button>
+              class="h-9 w-28 inline-flex items-center justify-center font-semibold text-[0.6875rem] sm:text-[0.8125rem] tracking-wider uppercase rounded-full border border-white/50 text-white/90 hover:border-gold hover:text-gold hover:-translate-y-px transition">Sign In</button>
+      <button (click)="openModal('register')" class="h-9 w-28 btn-gradient">Register</button>
     </div>
   </div>
 </nav>
 
 <!-- ═══ Hero ═══ -->
-<section class="relative overflow-hidden bg-zinc-100 [body[data-theme=dark]_&]:bg-dark-card" style="min-height: calc(100vh - 63px);">
+<section class="relative overflow-hidden bg-zinc-100 [body[data-theme=dark]_&]:bg-dark-elevated" style="min-height: calc(100vh - 63px);">
   <img src="images/network-pattern.svg" class="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none
-       [body[data-theme=dark]_&]:opacity-40" alt="" />
+       [body[data-theme=dark]_&]:opacity-80" alt="" />
   <div class="relative max-w-7xl mx-auto px-6 pb-0 grid lg:grid-cols-2 gap-12 items-stretch h-full" style="min-height: calc(100vh - 63px);">
-    <div class="flex flex-col justify-center py-16 lg:py-0">
+    <div class="flex flex-col justify-center py-16 lg:py-0 lg:pl-12">
       <p class="text-brand font-semibold text-sm uppercase tracking-widest mb-4">Face PKI by Seventh Sense AI</p>
       <h1 class="font-heading text-4xl lg:text-5xl font-extrabold text-zinc-900 leading-tight mb-6
                  [body[data-theme=dark]_&]:text-white">
@@ -59,8 +59,8 @@
         Generate cryptographic keys from facial biometrics in real time. No passwords. No tokens. No stored secrets. Just you.
       </p>
       <div class="flex flex-wrap gap-4">
-        <button (click)="openModal('register')" class="btn-gradient">Start Free Trial</button>
-        <button (click)="scrollTo('features')" class="btn-outline">Learn More</button>
+        <button (click)="openModal('register')" class="btn-gradient w-44">Free Trial</button>
+        <button (click)="scrollTo('features')" class="btn-outline w-44">Learn More</button>
       </div>
     </div>
     <div class="hidden lg:flex lg:items-end lg:justify-center">
@@ -69,59 +69,64 @@
   </div>
 </section>
 
-<!-- ═══ Features ═══ -->
-<section id="features" class="bg-white py-20 [body[data-theme=dark]_&]:bg-dark">
-  <div class="max-w-7xl mx-auto px-6">
-    <p class="text-brand font-semibold text-sm uppercase tracking-widest text-center mb-3">Features</p>
-    <h2 class="font-heading text-3xl font-bold text-zinc-900 text-center mb-12
-               [body[data-theme=dark]_&]:text-white">Why Face PKI?</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      @for (f of features; track f.title) {
-        <div class="rounded-2xl border border-zinc-200 bg-white p-6 hover:shadow-lg transition-shadow
-                    [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
-          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand to-gold text-white flex items-center justify-center mb-4 mx-auto">
-            @if (f.icon === 'key') {
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/></svg>
-            } @else if (f.icon === 'shield') {
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
-            } @else if (f.icon === 'camera') {
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"/></svg>
-            } @else {
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
-            }
-          </div>
-          <h3 class="font-heading font-bold text-zinc-900 mb-2 text-center [body[data-theme=dark]_&]:text-white">{{ f.title }}</h3>
-          <p class="text-sm text-zinc-500 leading-relaxed text-center [body[data-theme=dark]_&]:text-zinc-400">{{ f.desc }}</p>
-        </div>
-      }
-    </div>
-  </div>
-</section>
+<!-- ═══ Features + How It Works (one viewport slide) ═══ -->
+<div id="features" #slideContainer class="slide-container">
 
-<!-- ═══ How It Works ═══ -->
-<section class="bg-zinc-100 py-20 [body[data-theme=dark]_&]:bg-dark-card">
-  <div class="max-w-4xl mx-auto px-6">
-    <p class="text-brand font-semibold text-sm uppercase tracking-widest text-center mb-3">How It Works</p>
-    <h2 class="font-heading text-3xl font-bold text-zinc-900 text-center mb-14
-               [body[data-theme=dark]_&]:text-white">Three Simple Steps</h2>
-    <div class="grid md:grid-cols-3 gap-8">
-      @for (s of steps; track s.num) {
-        <div class="text-center">
-          <div class="w-14 h-14 rounded-full bg-gradient-to-br from-brand to-gold text-white font-heading font-bold text-lg flex items-center justify-center mx-auto mb-5">
-            {{ s.num }}
+  <!-- Features -->
+  <section class="slide-half bg-white lg:flex lg:items-center lg:justify-center py-16 lg:py-0 [body[data-theme=dark]_&]:bg-dark">
+    <div #featuresInner class="max-w-7xl mx-auto px-6 lg:py-8 w-full">
+      <p class="text-brand font-semibold text-xs uppercase tracking-widest text-center mb-2">Features</p>
+      <h2 class="font-heading text-2xl font-bold text-zinc-900 text-center mb-8
+                 [body[data-theme=dark]_&]:text-white">Why Face PKI?</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        @for (f of features; track f.title) {
+          <div class="rounded-2xl border border-zinc-200 bg-white p-5 hover:shadow-lg transition-shadow
+                      [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-brand to-gold text-white flex items-center justify-center mb-3 mx-auto">
+              @if (f.icon === 'key') {
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/></svg>
+              } @else if (f.icon === 'shield') {
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+              } @else if (f.icon === 'camera') {
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"/></svg>
+              } @else {
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
+              }
+            </div>
+            <h3 class="font-heading font-bold text-sm text-zinc-900 mb-1 text-center [body[data-theme=dark]_&]:text-white">{{ f.title }}</h3>
+            <p class="text-xs text-zinc-500 leading-relaxed text-center [body[data-theme=dark]_&]:text-zinc-400">{{ f.desc }}</p>
           </div>
-          <h3 class="font-heading font-bold text-xl text-zinc-900 mb-2 [body[data-theme=dark]_&]:text-white">{{ s.title }}</h3>
-          <p class="text-sm text-zinc-500 leading-relaxed [body[data-theme=dark]_&]:text-zinc-400">{{ s.desc }}</p>
-        </div>
-      }
+        }
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- How It Works -->
+  <section class="slide-half bg-zinc-100 lg:flex lg:items-center lg:justify-center py-16 lg:py-0 [body[data-theme=dark]_&]:bg-dark-card">
+    <div #stepsInner class="max-w-4xl mx-auto px-6 lg:py-8 w-full">
+      <p class="text-brand font-semibold text-xs uppercase tracking-widest text-center mb-2">How It Works</p>
+      <h2 class="font-heading text-2xl font-bold text-zinc-900 text-center mb-10
+                 [body[data-theme=dark]_&]:text-white">Three Simple Steps</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        @for (s of steps; track s.num) {
+          <div class="text-center">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-brand to-gold text-white font-heading font-bold text-base flex items-center justify-center mx-auto mb-4">
+              {{ s.num }}
+            </div>
+            <h3 class="font-heading font-bold text-lg text-zinc-900 mb-1 [body[data-theme=dark]_&]:text-white">{{ s.title }}</h3>
+            <p class="text-xs text-zinc-500 leading-relaxed [body[data-theme=dark]_&]:text-zinc-400">{{ s.desc }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+</div>
 
 <!-- ═══ CTA Banner ═══ -->
 <section class="relative overflow-hidden py-16"
          style="background: linear-gradient(135deg, #B3231D 0%, #8B1A15 50%, #131313 100%);">
-  <img src="images/networkg.png" class="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none" alt="" />
+  <img src="images/network-pattern-white.svg" class="absolute inset-0 w-full h-full object-cover opacity-15 pointer-events-none" alt="" />
   <div class="relative text-center max-w-2xl mx-auto px-6">
     <h2 class="font-heading text-3xl font-bold text-white mb-4">Ready to Go Passwordless?</h2>
     <p class="text-white/70 mb-8">Join organizations already using Face PKI to secure their identity infrastructure.</p>
@@ -157,8 +162,8 @@
 
 <!-- Login Modal -->
 @if (modal() === 'login') {
-  <div class="modal-overlay" (click)="onBackdrop($event)">
-    <div class="modal-box">
+  <div class="modal-overlay" >
+    <div class="modal-box" [style.zoom]="modalZoom()">
       <button (click)="closeModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 text-xl">&times;</button>
       <h2 class="font-heading text-xl font-bold text-zinc-900 mb-6 [body[data-theme=dark]_&]:text-white">Sign In</h2>
       @if (error()) {
@@ -168,7 +173,17 @@
         <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">Email</label>
         <input type="email" [(ngModel)]="loginEmail" name="email" class="input mb-4" placeholder="you&#64;company.com" required />
         <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">Password</label>
-        <input type="password" [(ngModel)]="loginPassword" name="password" class="input mb-2" placeholder="Your password" required />
+        <div class="relative mb-2">
+          <input [type]="showLoginPassword() ? 'text' : 'password'" [(ngModel)]="loginPassword" name="password" class="input pr-10" placeholder="Your password" required />
+          <button type="button" (click)="showLoginPassword.set(!showLoginPassword())"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 [body[data-theme=dark]_&]:hover:text-zinc-300">
+            @if (showLoginPassword()) {
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12c1.292 4.338 5.31 7.5 10.066 7.5.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"/></svg>
+            } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            }
+          </button>
+        </div>
         <div class="text-right mb-5">
           <button type="button" (click)="openModal('forgot')" class="text-xs text-brand hover:underline">Forgot password?</button>
         </div>
@@ -185,8 +200,8 @@
 
 <!-- Register Modal -->
 @if (modal() === 'register') {
-  <div class="modal-overlay" (click)="onBackdrop($event)">
-    <div class="modal-box">
+  <div class="modal-overlay" >
+    <div class="modal-box" [style.zoom]="modalZoom()">
       <button (click)="closeModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 text-xl">&times;</button>
       <h2 class="font-heading text-xl font-bold text-zinc-900 mb-6 [body[data-theme=dark]_&]:text-white">Create Account</h2>
       @if (error()) {
@@ -197,10 +212,20 @@
         <input type="text" [(ngModel)]="regName" name="name" class="input mb-4" placeholder="Jane Doe" required />
         <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">Email</label>
         <input type="email" [(ngModel)]="regEmail" name="email" class="input mb-4" placeholder="you&#64;company.com" required />
+        <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">Company</label>
+        <input type="text" [(ngModel)]="regCompany" name="company" class="input mb-4" placeholder="Acme Corp" />
         <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">Password</label>
-        <input type="password" [(ngModel)]="regPassword" name="password" class="input mb-4" placeholder="Create a password" required />
-        <label class="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">Confirm Password</label>
-        <input type="password" [(ngModel)]="regConfirm" name="confirm" class="input mb-6" placeholder="Confirm password" required />
+        <div class="relative mb-6">
+          <input [type]="showRegPassword() ? 'text' : 'password'" [(ngModel)]="regPassword" name="password" class="input pr-10" placeholder="Create a password" required />
+          <button type="button" (click)="showRegPassword.set(!showRegPassword())"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 [body[data-theme=dark]_&]:hover:text-zinc-300">
+            @if (showRegPassword()) {
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12c1.292 4.338 5.31 7.5 10.066 7.5.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"/></svg>
+            } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            }
+          </button>
+        </div>
         <button type="submit" class="btn-gradient w-full" [disabled]="loading()">
           {{ loading() ? 'Creating...' : 'Create Account' }}
         </button>
@@ -214,8 +239,8 @@
 
 <!-- Email Sent Modal -->
 @if (modal() === 'email-sent') {
-  <div class="modal-overlay" (click)="onBackdrop($event)">
-    <div class="modal-box text-center">
+  <div class="modal-overlay" >
+    <div class="modal-box text-center" [style.zoom]="modalZoom()">
       <button (click)="closeModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 text-xl">&times;</button>
       <div class="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-5 text-2xl
                   [body[data-theme=dark]_&]:bg-green-900/20 [body[data-theme=dark]_&]:text-green-400">&#10003;</div>
@@ -229,8 +254,8 @@
 
 <!-- Forgot Password Modal -->
 @if (modal() === 'forgot') {
-  <div class="modal-overlay" (click)="onBackdrop($event)">
-    <div class="modal-box">
+  <div class="modal-overlay" >
+    <div class="modal-box" [style.zoom]="modalZoom()">
       <button (click)="closeModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 text-xl">&times;</button>
       <h2 class="font-heading text-xl font-bold text-zinc-900 mb-2 [body[data-theme=dark]_&]:text-white">Forgot Password</h2>
       <p class="text-sm text-zinc-500 mb-6 [body[data-theme=dark]_&]:text-zinc-400">Enter your email and we'll send a reset link.</p>
@@ -251,8 +276,8 @@
 
 <!-- Reset Password Modal -->
 @if (modal() === 'reset') {
-  <div class="modal-overlay" (click)="onBackdrop($event)">
-    <div class="modal-box">
+  <div class="modal-overlay" >
+    <div class="modal-box" [style.zoom]="modalZoom()">
       <button (click)="closeModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 text-xl">&times;</button>
       <h2 class="font-heading text-xl font-bold text-zinc-900 mb-6 [body[data-theme=dark]_&]:text-white">Reset Password</h2>
       @if (error()) {

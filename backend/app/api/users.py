@@ -23,6 +23,8 @@ async def update_me(
         current_user.full_name = data.full_name
     if data.email is not None:
         current_user.email = data.email
+    if data.company is not None:
+        current_user.company = data.company
     await db.commit()
     await db.refresh(current_user)
     return current_user

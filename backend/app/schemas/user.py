@@ -6,6 +6,7 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
     full_name: str
+    company: str | None = None
 
 
 class UserLogin(BaseModel):
@@ -17,6 +18,7 @@ class UserRead(BaseModel):
     id: str
     email: str
     full_name: str
+    company: str | None = None
     is_active: bool
     created_at: datetime
     updated_at: datetime
@@ -27,6 +29,7 @@ class UserRead(BaseModel):
 class UserUpdate(BaseModel):
     full_name: str | None = None
     email: EmailStr | None = None
+    company: str | None = None
 
 
 class Token(BaseModel):

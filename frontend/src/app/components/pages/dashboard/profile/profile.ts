@@ -14,16 +14,18 @@ export class Profile implements OnInit {
   private api = inject(ApiService);
 
   fullName = '';
+  company = '';
   message = signal('');
   loading = signal(false);
 
   ngOnInit(): void {
     this.fullName = this.auth.user()?.full_name || '';
+    this.company = this.auth.user()?.company || '';
   }
 
   save(): void {
     this.loading.set(true);
-    this.api.put('/users/me', { full_name: this.fullName }).subscribe({
+    this.api.put('/users/me', { full_name: this.fullName, company: this.company || null }).subscribe({
       next: () => {
         this.loading.set(false);
         this.message.set('Profile updated successfully');
