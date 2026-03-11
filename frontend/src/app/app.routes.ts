@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
+import { productRoutes } from './product/product.routes';
 
 export const routes: Routes = [
   {
@@ -13,6 +14,7 @@ export const routes: Routes = [
     children: [
       { path: '', loadComponent: () => import('./components/pages/dashboard/overview/overview').then((m) => m.Overview) },
       { path: 'profile', loadComponent: () => import('./components/pages/dashboard/profile/profile').then((m) => m.Profile) },
+      ...productRoutes,
     ],
   },
   {

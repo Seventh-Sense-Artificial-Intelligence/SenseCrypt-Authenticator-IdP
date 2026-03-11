@@ -15,6 +15,7 @@ if config.config_file_name is not None:
 
 from app.database import Base
 from app.models import User  # noqa: F401
+import app.models.product  # noqa: F401 — picks up product models for autogenerate
 
 target_metadata = Base.metadata
 
