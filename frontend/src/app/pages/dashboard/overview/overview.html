@@ -1,0 +1,43 @@
+<div class="max-w-5xl">
+  <!-- Welcome banner -->
+  <div class="relative overflow-hidden rounded-2xl p-7 lg:p-9 mb-6"
+       style="background: linear-gradient(135deg, #B3231D 0%, #8B1A15 40%, #131313 100%);">
+    <img src="images/network2.png" class="absolute inset-0 w-full h-full object-cover opacity-[0.07] pointer-events-none" alt="" />
+    <div class="relative z-10">
+      <p class="text-white/50 text-xs font-semibold uppercase tracking-widest mb-2">Dashboard</p>
+      <h1 class="font-heading text-2xl font-bold text-white mb-1.5">Welcome back, {{ auth.user()?.full_name || 'User' }}</h1>
+      <p class="text-white/55 text-sm">Manage your authentication settings and monitor activity.</p>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="bg-white border border-zinc-200 rounded-2xl p-5
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-3">Authentications</p>
+      <p class="font-heading text-3xl font-bold text-zinc-900 [body[data-theme=dark]_&]:text-white">0</p>
+      <p class="text-xs text-zinc-400 mt-1">Today</p>
+    </div>
+    <div class="bg-white border border-zinc-200 rounded-2xl p-5
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-3">Devices</p>
+      <p class="font-heading text-3xl font-bold text-zinc-900 [body[data-theme=dark]_&]:text-white">0</p>
+      <p class="text-xs text-zinc-400 mt-1">Registered</p>
+    </div>
+    <div class="bg-white border border-zinc-200 rounded-2xl p-5
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-3">Status</p>
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+        <p class="font-heading text-lg font-bold text-zinc-900 [body[data-theme=dark]_&]:text-white">Active</p>
+      </div>
+      <p class="text-xs text-zinc-400 mt-1">Account verified</p>
+    </div>
+    <div class="bg-white border border-zinc-200 rounded-2xl p-5
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-3">Failed Attempts</p>
+      <p class="font-heading text-3xl font-bold text-zinc-900 [body[data-theme=dark]_&]:text-white">0</p>
+      <p class="text-xs text-zinc-400 mt-1">Last 30 days</p>
+    </div>
+  </div>
+</div>

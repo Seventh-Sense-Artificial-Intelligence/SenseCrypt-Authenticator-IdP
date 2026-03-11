@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #B3231D;
+  --color-brand-dark: #8B1A15;
+  --color-brand-light: #E04040;
+  --color-gold: #F5A324;
+  --color-dark: #131313;
+  --color-dark-card: #1c1c1c;
+  --color-dark-elevated: #262626;
+  --color-muted: #71717A;
+  --color-subtle: #F4F4F5;
+  --font-heading: "Wix Madefor Display", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+/* ── Base ── */
+body {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-theme="dark"] body {
+  background: var(--color-dark);
+  color: #d4d4d8;
+}
+
+button { cursor: pointer; }
+
+/* ── Gradient accent bar ── */
+.accent-bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-brand) 0%, var(--color-gold) 100%);
+}
+
+/* ── Pill button ── */
+.btn-gradient {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(135deg, var(--color-brand), var(--color-gold));
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+@media (min-width: 640px) {
+  .btn-gradient {
+    padding: 0.75rem 1.75rem;
+    font-size: 0.8125rem;
+  }
+}
+.btn-gradient:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(179, 35, 29, 0.3);
+}
+.btn-gradient:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: 1.5px solid #d4d4d8;
+  background: transparent;
+  color: #3f3f46;
+  transition: all 0.2s;
+}
+@media (min-width: 640px) {
+  .btn-outline {
+    padding: 0.6875rem 1.75rem;
+    font-size: 0.8125rem;
+  }
+}
+.btn-outline:hover {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+[data-theme="dark"] .btn-outline {
+  border-color: #3f3f46;
+  color: #d4d4d8;
+}
+[data-theme="dark"] .btn-outline:hover {
+  border-color: var(--color-brand-light);
+  color: var(--color-brand-light);
+}
+
+/* ── Form input ── */
+.input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1.5px solid #e4e4e7;
+  border-radius: 0.625rem;
+  background: #fff;
+  color: #18181b;
+  font-size: 0.9375rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input:focus {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px rgba(179, 35, 29, 0.08);
+}
+.input::placeholder { color: #a1a1aa; }
+[data-theme="dark"] .input {
+  background: var(--color-dark-card);
+  border-color: #333;
+  color: #e4e4e7;
+}
+[data-theme="dark"] .input:focus {
+  border-color: var(--color-brand-light);
+  box-shadow: 0 0 0 3px rgba(224, 64, 64, 0.1);
+}
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+  animation: fadeIn 0.15s ease;
+}
+.modal-box {
+  background: #fff;
+  border-radius: 1.25rem;
+  padding: 2.25rem;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+  animation: slideUp 0.25s cubic-bezier(.16,1,.3,1);
+}
+[data-theme="dark"] .modal-box {
+  background: var(--color-dark-elevated);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+}
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px) }
+  to { opacity: 1; transform: translateY(0) }
+}
+
+/* ── Curtain Loader ── */
+.curtain-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+.curtain-left,
+.curtain-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: #131313;
+}
+.curtain-left {
+  left: 0;
+  animation: curtainLeft 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.6s forwards;
+}
+.curtain-right {
+  right: 0;
+  animation: curtainRight 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.6s forwards;
+}
+.curtain-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  animation: curtainLogoFade 0.3s ease 0.5s forwards;
+  opacity: 1;
+}
+@keyframes curtainLeft {
+  to { transform: translateX(-100%); }
+}
+@keyframes curtainRight {
+  to { transform: translateX(100%); }
+}
+@keyframes curtainLogoFade {
+  to { opacity: 0; }
+}

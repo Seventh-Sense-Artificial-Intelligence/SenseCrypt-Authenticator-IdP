@@ -1,0 +1,22 @@
+<aside class="shrink-0 bg-white dark:bg-surface-dark-elevated border-r border-border-light dark:border-border-dark overflow-y-auto" style="width: var(--sidebar-width);">
+  <nav class="flex flex-col gap-1 p-3 pt-4">
+    @for (link of links; track link.path) {
+      <a class="group flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-muted transition-all duration-200"
+         [class.bg-surface]="rla.isActive"
+         [class.dark:bg-surface-dark]="rla.isActive"
+         [class.text-brand-red]="rla.isActive"
+         [class.dark:text-brand-red-light]="rla.isActive"
+         [class.hover:bg-surface]="!rla.isActive"
+         [class.dark:hover:bg-surface-dark]="!rla.isActive"
+         [class.hover:text-body]="!rla.isActive"
+         [class.dark:hover:text-white]="!rla.isActive"
+         [routerLink]="link.path"
+         routerLinkActive
+         #rla="routerLinkActive"
+         [routerLinkActiveOptions]="{ exact: link.exact }">
+        <span class="text-base opacity-70 group-hover:opacity-100 transition-opacity">{{ link.icon }}</span>
+        <span>{{ link.label }}</span>
+      </a>
+    }
+  </nav>
+</aside>

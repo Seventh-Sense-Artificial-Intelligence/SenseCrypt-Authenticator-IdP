@@ -1,0 +1,32 @@
+<section id="features" class="py-24 px-6 lg:px-8 bg-white dark:bg-dark-bg">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="section-label mb-4 justify-center">Capabilities</p>
+      <h2 class="font-display text-3xl lg:text-4xl font-bold text-body dark:text-white mb-4">
+        Enterprise-Grade Security
+      </h2>
+      <p class="text-muted text-lg max-w-xl mx-auto leading-relaxed">
+        Every feature designed for zero-trust environments where privacy is non-negotiable.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      @for (feature of features; track feature.title; let i = $index) {
+        <div class="group relative bg-surface dark:bg-surface-dark-elevated rounded-2xl p-7 border border-border-light dark:border-border-dark transition-all duration-300 hover:shadow-lg hover:shadow-brand-red/5 dark:hover:shadow-brand-red/10 hover:-translate-y-0.5 overflow-hidden">
+          <!-- Subtle hover accent -->
+          <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-brand-red to-brand-gold scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500"></div>
+
+          <div class="flex items-start gap-5">
+            <div class="w-12 h-12 rounded-xl overflow-hidden shrink-0 ring-1 ring-border-light dark:ring-border-dark">
+              <img [src]="feature.icon" [alt]="feature.title" class="w-full h-full object-cover" />
+            </div>
+            <div>
+              <h3 class="font-display font-semibold text-[1.0625rem] text-body dark:text-white mb-1.5">{{ feature.title }}</h3>
+              <p class="text-muted text-sm leading-relaxed">{{ feature.desc }}</p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
