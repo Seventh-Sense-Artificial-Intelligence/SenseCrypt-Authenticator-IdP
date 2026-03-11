@@ -4,20 +4,20 @@ import { authGuard } from './guards/auth-guard';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./pages/landing/landing').then((m) => m.Landing),
+    loadComponent: () => import('./components/pages/landing/landing').then((m) => m.Landing),
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
+    loadComponent: () => import('./components/pages/dashboard/dashboard').then((m) => m.Dashboard),
     canActivate: [authGuard],
     children: [
-      { path: '', loadComponent: () => import('./pages/dashboard/overview/overview').then((m) => m.Overview) },
-      { path: 'profile', loadComponent: () => import('./pages/dashboard/profile/profile').then((m) => m.Profile) },
+      { path: '', loadComponent: () => import('./components/pages/dashboard/overview/overview').then((m) => m.Overview) },
+      { path: 'profile', loadComponent: () => import('./components/pages/dashboard/profile/profile').then((m) => m.Profile) },
     ],
   },
   {
     path: 'verify-email',
-    loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
+    loadComponent: () => import('./components/pages/verify-email/verify-email').then((m) => m.VerifyEmail),
   },
   { path: '**', redirectTo: '' },
 ];

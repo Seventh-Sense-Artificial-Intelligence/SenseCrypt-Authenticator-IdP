@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../services/auth';
+import { AuthService } from '../../../services/auth';
 
 @Component({
   selector: 'app-verify-email',

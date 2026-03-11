@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TopNav } from '../../common/top-nav/top-nav';
 import { LeftNav } from '../../common/left-nav/left-nav';
-import { AuthService } from '../../services/auth';
+import { AuthService } from '../../../services/auth';
 
 @Component({
   selector: 'app-dashboard',

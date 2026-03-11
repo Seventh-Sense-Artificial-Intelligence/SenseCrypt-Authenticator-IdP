@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ThemeService } from '../../services/theme';
-import { AuthService } from '../../services/auth';
+import { ThemeService } from '../../../services/theme';
+import { AuthService } from '../../../services/auth';
 
 type Modal = null | 'login' | 'register' | 'forgot' | 'reset' | 'email-sent';
 

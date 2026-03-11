@@ -1,7 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../../services/auth';
-import { ApiService } from '../../../services/api';
+import { AuthService } from '../../../../services/auth';
+import { ApiService } from '../../../../services/api';
 
 @Component({
   selector: 'app-profile',
