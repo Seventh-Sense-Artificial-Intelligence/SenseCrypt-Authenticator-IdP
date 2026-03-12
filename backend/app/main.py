@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from app.api.router import router
+from app.api.oidc.router import oidc_router
 
 app = FastAPI(title="Portal API")
 
@@ -16,6 +17,7 @@ app.add_middleware(
 )
 
 app.include_router(router)
+app.include_router(oidc_router)
 
 static_dir = Path(__file__).parent.parent / "static"
 if static_dir.exists():

@@ -1,0 +1,102 @@
+<div class="max-w-5xl">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="font-heading text-2xl font-bold text-zinc-900 [body[data-theme=dark]_&]:text-white">Applications</h2>
+    <button (click)="navigateToCreate()" class="btn-gradient text-xs">
+      <span class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+        New Application
+      </span>
+    </button>
+  </div>
+
+  <!-- Loading state -->
+  @if (loading()) {
+    <div class="bg-white border border-zinc-200 rounded-2xl p-8 text-center
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-8 h-8 border-2 border-zinc-200 border-t-brand rounded-full animate-spin
+                    [body[data-theme=dark]_&]:border-zinc-700 [body[data-theme=dark]_&]:border-t-brand"></div>
+        <p class="text-sm text-zinc-400">Loading applications...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Empty state -->
+  @if (!loading() && applications().length === 0) {
+    <div class="bg-white border border-zinc-200 rounded-2xl p-10 text-center
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <div class="flex flex-col items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-zinc-100 flex items-center justify-center
+                    [body[data-theme=dark]_&]:bg-zinc-800">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="font-heading font-semibold text-zinc-900 mb-1 [body[data-theme=dark]_&]:text-white">No applications registered yet</p>
+          <p class="text-sm text-zinc-400">Create one to get started.</p>
+        </div>
+        <button (click)="navigateToCreate()" class="btn-gradient text-xs mt-2">Create Application</button>
+      </div>
+    </div>
+  }
+
+  <!-- Applications table -->
+  @if (!loading() && applications().length > 0) {
+    <div class="bg-white border border-zinc-200 rounded-2xl overflow-hidden
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <table class="w-full">
+        <thead>
+          <tr class="bg-zinc-50 [body[data-theme=dark]_&]:bg-dark-card">
+            <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Name</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Client ID</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Type</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Status</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (app of applications(); track app.id) {
+            <tr (click)="navigateToDetail(app.id)"
+                class="border-t border-zinc-100 cursor-pointer hover:bg-zinc-50 transition
+                       [body[data-theme=dark]_&]:border-zinc-800 [body[data-theme=dark]_&]:hover:bg-dark-card">
+              <td class="px-5 py-4">
+                <span class="font-semibold text-sm text-zinc-900 [body[data-theme=dark]_&]:text-white">{{ app.name }}</span>
+              </td>
+              <td class="px-5 py-4">
+                <div class="flex items-center gap-2">
+                  <code class="text-xs font-mono text-zinc-500 bg-zinc-100 px-2 py-1 rounded-md max-w-[180px] truncate
+                              [body[data-theme=dark]_&]:bg-zinc-800 [body[data-theme=dark]_&]:text-zinc-400">{{ app.client_id }}</code>
+                  <button (click)="copyToClipboard(app.client_id, $event)"
+                          class="p-1 rounded-md text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition
+                                 [body[data-theme=dark]_&]:hover:text-zinc-300 [body[data-theme=dark]_&]:hover:bg-zinc-800"
+                          title="Copy Client ID">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="px-5 py-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-600
+                             [body[data-theme=dark]_&]:bg-zinc-800 [body[data-theme=dark]_&]:text-zinc-400">
+                  {{ formatType(app.application_type) }}
+                </span>
+              </td>
+              <td class="px-5 py-4">
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full" [class]="app.is_active ? 'bg-green-500' : 'bg-zinc-300 [body[data-theme=dark]_&]:bg-zinc-600'"></div>
+                  <span class="text-xs text-zinc-500 [body[data-theme=dark]_&]:text-zinc-400">{{ app.is_active ? 'Active' : 'Inactive' }}</span>
+                </div>
+              </td>
+              <td class="px-5 py-4">
+                <span class="text-xs text-zinc-500 [body[data-theme=dark]_&]:text-zinc-400">{{ formatDate(app.created_at) }}</span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

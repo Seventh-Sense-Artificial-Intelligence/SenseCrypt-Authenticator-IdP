@@ -1,0 +1,229 @@
+<div class="max-w-2xl">
+  <!-- Back link -->
+  <a routerLink="/dashboard/applications"
+     class="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 transition mb-6
+            [body[data-theme=dark]_&]:hover:text-zinc-300">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+    </svg>
+    Back to Applications
+  </a>
+
+  <!-- Loading state -->
+  @if (loading()) {
+    <div class="bg-white border border-zinc-200 rounded-2xl p-8 text-center
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-8 h-8 border-2 border-zinc-200 border-t-brand rounded-full animate-spin
+                    [body[data-theme=dark]_&]:border-zinc-700 [body[data-theme=dark]_&]:border-t-brand"></div>
+        <p class="text-sm text-zinc-400">Loading application...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Application loaded -->
+  @if (!loading() && app()) {
+    <!-- Header -->
+    <div class="flex items-center gap-3 mb-6">
+      <h2 class="font-heading text-2xl font-bold text-zinc-900 [body[data-theme=dark]_&]:text-white">{{ app()!.name }}</h2>
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium"
+            [class]="isActive
+              ? 'bg-green-50 text-green-700 border border-green-200 [body[data-theme=dark]_&]:bg-green-900/15 [body[data-theme=dark]_&]:text-green-400 [body[data-theme=dark]_&]:border-green-800/30'
+              : 'bg-zinc-100 text-zinc-500 border border-zinc-200 [body[data-theme=dark]_&]:bg-zinc-800 [body[data-theme=dark]_&]:text-zinc-400 [body[data-theme=dark]_&]:border-zinc-700'">
+        <div class="w-1.5 h-1.5 rounded-full" [class]="isActive ? 'bg-green-500' : 'bg-zinc-400'"></div>
+        {{ isActive ? 'Active' : 'Inactive' }}
+      </span>
+    </div>
+
+    <!-- Messages -->
+    @if (message()) {
+      <div class="px-4 py-3 rounded-xl text-sm mb-5 border"
+           [class]="messageType() === 'success'
+             ? 'bg-green-50 text-green-700 border-green-200 [body[data-theme=dark]_&]:bg-green-900/15 [body[data-theme=dark]_&]:text-green-400 [body[data-theme=dark]_&]:border-green-800/30'
+             : 'bg-red-50 text-red-700 border-red-200 [body[data-theme=dark]_&]:bg-red-900/15 [body[data-theme=dark]_&]:text-red-400 [body[data-theme=dark]_&]:border-red-800/30'">
+        {{ message() }}
+      </div>
+    }
+
+    <!-- New secret display -->
+    @if (newSecret()) {
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-5
+                  [body[data-theme=dark]_&]:bg-amber-900/10 [body[data-theme=dark]_&]:border-amber-800/30">
+        <label class="block text-xs font-semibold text-amber-700 uppercase tracking-wider mb-2
+                      [body[data-theme=dark]_&]:text-amber-400">New Client Secret</label>
+        <div class="flex items-center gap-2 mb-2">
+          <code class="flex-1 text-sm font-mono text-amber-800 bg-amber-100 px-3 py-2 rounded-lg break-all font-bold
+                      [body[data-theme=dark]_&]:bg-amber-900/20 [body[data-theme=dark]_&]:text-amber-300">{{ newSecret() }}</code>
+          <button (click)="copyToClipboard(newSecret())" class="btn-gradient text-xs shrink-0">Copy</button>
+        </div>
+        <p class="text-xs text-amber-600 [body[data-theme=dark]_&]:text-amber-500/80">
+          This is the last time you'll see this secret. Store it securely.
+        </p>
+      </div>
+    }
+
+    <!-- Client ID (read-only) -->
+    <div class="bg-white border border-zinc-200 rounded-2xl p-5 mb-5
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Client ID</label>
+      <div class="flex items-center gap-2">
+        <code class="flex-1 text-sm font-mono text-zinc-700 bg-zinc-100 px-3 py-2 rounded-lg break-all
+                    [body[data-theme=dark]_&]:bg-zinc-800 [body[data-theme=dark]_&]:text-zinc-300">{{ app()!.client_id }}</code>
+        <button (click)="copyToClipboard(app()!.client_id)" class="btn-outline text-xs shrink-0">Copy</button>
+      </div>
+    </div>
+
+    <!-- Edit form -->
+    <div class="bg-white border border-zinc-200 rounded-2xl p-6
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <form (ngSubmit)="save()">
+        <!-- Name -->
+        <div class="mb-5">
+          <label for="detail-name" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Application Name</label>
+          <input id="detail-name" type="text" [(ngModel)]="name" name="name" class="input" />
+        </div>
+
+        <!-- Application Type (read-only) -->
+        <div class="mb-5">
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Application Type</label>
+          <input type="text" [value]="app()!.application_type" disabled class="input opacity-50 cursor-not-allowed" />
+        </div>
+
+        <!-- Active toggle -->
+        <div class="mb-5">
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" [(ngModel)]="isActive" name="isActive"
+                   class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
+            <span class="text-sm font-medium text-zinc-700 [body[data-theme=dark]_&]:text-zinc-300">Application Active</span>
+          </label>
+        </div>
+
+        <!-- Redirect URIs -->
+        <div class="mb-5">
+          <label for="detail-redirect-uris" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Redirect URIs</label>
+          <textarea id="detail-redirect-uris" [(ngModel)]="redirectUris" name="redirectUris" class="input" rows="3"></textarea>
+          <p class="text-xs text-zinc-400 mt-1.5">One URI per line</p>
+        </div>
+
+        <!-- Post Logout Redirect URIs -->
+        <div class="mb-5">
+          <label for="detail-logout-uris" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Post Logout Redirect URIs</label>
+          <textarea id="detail-logout-uris" [(ngModel)]="postLogoutRedirectUris" name="postLogoutRedirectUris" class="input" rows="2"></textarea>
+          <p class="text-xs text-zinc-400 mt-1.5">One URI per line (optional)</p>
+        </div>
+
+        <!-- Scopes -->
+        <div class="mb-5">
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Allowed Scopes</label>
+          <div class="flex flex-wrap gap-3">
+            <label class="flex items-center gap-2 text-sm text-zinc-500 [body[data-theme=dark]_&]:text-zinc-400 cursor-not-allowed">
+              <input type="checkbox" [checked]="true" disabled
+                     class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
+              openid
+            </label>
+            <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
+              <input type="checkbox" [checked]="hasScope('profile')" (change)="toggleScope('profile')"
+                     class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
+              profile
+            </label>
+            <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
+              <input type="checkbox" [checked]="hasScope('email')" (change)="toggleScope('email')"
+                     class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
+              email
+            </label>
+          </div>
+        </div>
+
+        <!-- Grant Types -->
+        <div class="mb-5">
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Grant Types</label>
+          <div class="flex flex-wrap gap-3">
+            <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
+              <input type="checkbox" [checked]="hasGrantType('authorization_code')" (change)="toggleGrantType('authorization_code')"
+                     class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
+              authorization_code
+            </label>
+            <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
+              <input type="checkbox" [checked]="hasGrantType('refresh_token')" (change)="toggleGrantType('refresh_token')"
+                     class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
+              refresh_token
+            </label>
+            <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
+              <input type="checkbox" [checked]="hasGrantType('client_credentials')" (change)="toggleGrantType('client_credentials')"
+                     class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
+              client_credentials
+            </label>
+          </div>
+        </div>
+
+        <!-- Token Endpoint Auth Method -->
+        <div class="mb-6">
+          <label for="detail-auth-method" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Token Endpoint Auth Method</label>
+          <select id="detail-auth-method" [(ngModel)]="tokenEndpointAuthMethod" name="tokenEndpointAuthMethod" class="input">
+            <option value="client_secret_post">client_secret_post</option>
+            <option value="client_secret_basic">client_secret_basic</option>
+            <option value="none">none</option>
+          </select>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="flex items-center gap-3 flex-wrap">
+          <button type="submit" class="btn-gradient text-xs" [disabled]="saving()">
+            {{ saving() ? 'Saving...' : 'Save Changes' }}
+          </button>
+          <button type="button" (click)="confirmRotateSecret()" class="btn-outline text-xs">
+            Rotate Secret
+          </button>
+          <button type="button" (click)="confirmDelete()"
+                  class="text-xs font-semibold text-red-600 hover:text-red-700 transition px-4 py-2
+                         [body[data-theme=dark]_&]:text-red-400 [body[data-theme=dark]_&]:hover:text-red-300">
+            Delete Application
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Not found state -->
+  @if (!loading() && !app()) {
+    <div class="bg-white border border-zinc-200 rounded-2xl p-8 text-center
+                [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
+      <p class="text-sm text-zinc-400">Application not found.</p>
+    </div>
+  }
+
+  <!-- Delete confirmation modal -->
+  @if (showDeleteConfirm()) {
+    <div class="modal-overlay" (click)="cancelDelete()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+        <h3 class="font-heading text-lg font-bold text-zinc-900 mb-2 [body[data-theme=dark]_&]:text-white">Delete Application</h3>
+        <p class="text-sm text-zinc-500 mb-6 [body[data-theme=dark]_&]:text-zinc-400">
+          Are you sure you want to delete this application? This action cannot be undone. All associated client credentials will be permanently invalidated.
+        </p>
+        <div class="flex items-center gap-3 justify-end">
+          <button (click)="cancelDelete()" class="btn-outline text-xs">Cancel</button>
+          <button (click)="deleteApp()"
+                  class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-red-600 hover:bg-red-700 transition">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Rotate secret confirmation modal -->
+  @if (showRotateConfirm()) {
+    <div class="modal-overlay" (click)="cancelRotateSecret()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+        <h3 class="font-heading text-lg font-bold text-zinc-900 mb-2 [body[data-theme=dark]_&]:text-white">Rotate Client Secret</h3>
+        <p class="text-sm text-zinc-500 mb-6 [body[data-theme=dark]_&]:text-zinc-400">
+          This will invalidate the current client secret and generate a new one. Any services using the current secret will need to be updated.
+        </p>
+        <div class="flex items-center gap-3 justify-end">
+          <button (click)="cancelRotateSecret()" class="btn-outline text-xs">Cancel</button>
+          <button (click)="rotateSecret()" class="btn-gradient text-xs">Rotate Secret</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

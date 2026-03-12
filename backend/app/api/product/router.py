@@ -1,10 +1,8 @@
 from fastapi import APIRouter
+from app.api.product.applications import router as applications_router
 
 # ── Product Routes ──
 # Import and include product-specific routers here.
-#
-# Example:
-#   from app.api.product.analytics import router as analytics_router
-#   router.include_router(analytics_router)
 
 router = APIRouter(prefix="/product", tags=["product"])
+router.include_router(applications_router)

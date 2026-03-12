@@ -20,7 +20,8 @@ import app.models.product  # noqa: F401 — picks up product models for autogene
 target_metadata = Base.metadata
 
 def get_url():
-    return os.getenv("DATABASE_URL", "")
+    from app.config import get_settings
+    return get_settings().DATABASE_URL
 
 
 def run_migrations_offline():

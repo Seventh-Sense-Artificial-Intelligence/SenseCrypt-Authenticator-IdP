@@ -1,11 +1,16 @@
 import { Routes } from '@angular/router';
 
-/*
- * ── Product Routes ──
- * Add product-specific dashboard pages here.
- * These are loaded as children of the /dashboard route.
- *
- * Example:
- *   { path: 'analytics', loadComponent: () => import('./pages/analytics/analytics').then(m => m.Analytics) },
- */
-export const productRoutes: Routes = [];
+export const productRoutes: Routes = [
+  {
+    path: 'applications',
+    loadComponent: () => import('./pages/applications/applications').then(m => m.Applications),
+  },
+  {
+    path: 'applications/new',
+    loadComponent: () => import('./pages/application-create/application-create').then(m => m.ApplicationCreate),
+  },
+  {
+    path: 'applications/:id',
+    loadComponent: () => import('./pages/application-detail/application-detail').then(m => m.ApplicationDetail),
+  },
+];

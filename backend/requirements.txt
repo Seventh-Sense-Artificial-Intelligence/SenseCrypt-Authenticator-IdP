@@ -10,3 +10,5 @@ bcrypt>=4.0
 python-multipart==0.0.20
 email-validator>=2.0
 pydantic-settings==2.7.1
+cryptography>=42.0
+qrcode>=7.4

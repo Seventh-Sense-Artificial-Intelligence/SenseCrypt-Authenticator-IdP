@@ -1,5 +1,4 @@
-# Product-specific SQLAlchemy models.
-# Add your models here. They will be picked up by Alembic autogenerate.
-#
-# Example:
-#   from app.models.product.widget import Widget
+from app.models.product.oauth_application import OAuthApplication  # noqa: F401
+from app.models.product.authorization_code import AuthorizationCode  # noqa: F401
+from app.models.product.refresh_token import OIDCRefreshToken  # noqa: F401
+from app.models.product.auth_challenge import AuthChallenge  # noqa: F401
