@@ -54,7 +54,9 @@
         <div class="flex items-center gap-2 mb-2">
           <code class="flex-1 text-sm font-mono text-amber-800 bg-amber-100 px-3 py-2 rounded-lg break-all font-bold
                       [body[data-theme=dark]_&]:bg-amber-900/20 [body[data-theme=dark]_&]:text-amber-300">{{ newSecret() }}</code>
-          <button (click)="copyToClipboard(newSecret())" class="btn-gradient text-xs shrink-0">Copy</button>
+          <button (click)="copyToClipboard('secret', newSecret())" class="btn-gradient text-xs shrink-0">
+            {{ copiedField() === 'secret' ? 'Copied!' : 'Copy' }}
+          </button>
         </div>
         <p class="text-xs text-amber-600 [body[data-theme=dark]_&]:text-amber-500/80">
           This is the last time you'll see this secret. Store it securely.
@@ -65,11 +67,16 @@
     <!-- Client ID (read-only) -->
     <div class="bg-white border border-zinc-200 rounded-2xl p-5 mb-5
                 [body[data-theme=dark]_&]:bg-dark-elevated [body[data-theme=dark]_&]:border-zinc-800">
-      <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Client ID</label>
+      <label class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+        Client ID
+        <info-tip [content]="tips.clientId" />
+      </label>
       <div class="flex items-center gap-2">
         <code class="flex-1 text-sm font-mono text-zinc-700 bg-zinc-100 px-3 py-2 rounded-lg break-all
                     [body[data-theme=dark]_&]:bg-zinc-800 [body[data-theme=dark]_&]:text-zinc-300">{{ app()!.client_id }}</code>
-        <button (click)="copyToClipboard(app()!.client_id)" class="btn-outline text-xs shrink-0">Copy</button>
+        <button (click)="copyToClipboard('client_id', app()!.client_id)" class="btn-outline text-xs shrink-0">
+          {{ copiedField() === 'client_id' ? 'Copied!' : 'Copy' }}
+        </button>
       </div>
     </div>
 
@@ -79,14 +86,20 @@
       <form (ngSubmit)="save()">
         <!-- Name -->
         <div class="mb-5">
-          <label for="detail-name" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Application Name</label>
+          <label for="detail-name" class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            Application Name
+            <info-tip [content]="tips.name" />
+          </label>
           <input id="detail-name" type="text" [(ngModel)]="name" name="name" class="input" />
         </div>
 
         <!-- Application Type (read-only) -->
         <div class="mb-5">
-          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Application Type</label>
-          <input type="text" [value]="app()!.application_type" disabled class="input opacity-50 cursor-not-allowed" />
+          <label class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            Application Type
+            <info-tip [content]="tips.type" />
+          </label>
+          <input type="text" [value]="formatType(app()!.application_type)" disabled class="input opacity-50 cursor-not-allowed" />
         </div>
 
         <!-- Active toggle -->
@@ -100,69 +113,84 @@
 
         <!-- Redirect URIs -->
         <div class="mb-5">
-          <label for="detail-redirect-uris" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Redirect URIs</label>
+          <label for="detail-redirect-uris" class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            Redirect URIs
+            <info-tip [content]="tips.redirectUris" />
+          </label>
           <textarea id="detail-redirect-uris" [(ngModel)]="redirectUris" name="redirectUris" class="input" rows="3"></textarea>
           <p class="text-xs text-zinc-400 mt-1.5">One URI per line</p>
         </div>
 
         <!-- Post Logout Redirect URIs -->
         <div class="mb-5">
-          <label for="detail-logout-uris" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Post Logout Redirect URIs</label>
+          <label for="detail-logout-uris" class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            Post-Logout Redirect URIs
+            <info-tip [content]="tips.postLogoutRedirectUris" />
+          </label>
           <textarea id="detail-logout-uris" [(ngModel)]="postLogoutRedirectUris" name="postLogoutRedirectUris" class="input" rows="2"></textarea>
           <p class="text-xs text-zinc-400 mt-1.5">One URI per line (optional)</p>
         </div>
 
         <!-- Scopes -->
         <div class="mb-5">
-          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Allowed Scopes</label>
+          <label class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+            Allowed Scopes
+            <info-tip [content]="tips.scopes" />
+          </label>
           <div class="flex flex-wrap gap-3">
             <label class="flex items-center gap-2 text-sm text-zinc-500 [body[data-theme=dark]_&]:text-zinc-400 cursor-not-allowed">
               <input type="checkbox" [checked]="true" disabled
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              openid
+              OpenID
             </label>
             <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
               <input type="checkbox" [checked]="hasScope('profile')" (change)="toggleScope('profile')"
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              profile
+              Profile
             </label>
             <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
               <input type="checkbox" [checked]="hasScope('email')" (change)="toggleScope('email')"
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              email
+              Email
             </label>
           </div>
         </div>
 
         <!-- Grant Types -->
         <div class="mb-5">
-          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Grant Types</label>
+          <label class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+            Grant Types
+            <info-tip [content]="tips.grantTypes" />
+          </label>
           <div class="flex flex-wrap gap-3">
             <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
               <input type="checkbox" [checked]="hasGrantType('authorization_code')" (change)="toggleGrantType('authorization_code')"
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              authorization_code
+              Authorization Code
             </label>
             <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
               <input type="checkbox" [checked]="hasGrantType('refresh_token')" (change)="toggleGrantType('refresh_token')"
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              refresh_token
+              Refresh Token
             </label>
             <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
               <input type="checkbox" [checked]="hasGrantType('client_credentials')" (change)="toggleGrantType('client_credentials')"
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              client_credentials
+              Client Credentials
             </label>
           </div>
         </div>
 
         <!-- Token Endpoint Auth Method -->
         <div class="mb-6">
-          <label for="detail-auth-method" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Token Endpoint Auth Method</label>
+          <label for="detail-auth-method" class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            Token Endpoint Auth Method
+            <info-tip [content]="tips.authMethod" />
+          </label>
           <select id="detail-auth-method" [(ngModel)]="tokenEndpointAuthMethod" name="tokenEndpointAuthMethod" class="input">
-            <option value="client_secret_post">client_secret_post</option>
-            <option value="client_secret_basic">client_secret_basic</option>
-            <option value="none">none</option>
+            <option value="client_secret_post">Client Secret (POST)</option>
+            <option value="client_secret_basic">Client Secret (Basic)</option>
+            <option value="none">None (Public Client)</option>
           </select>
         </div>
 

@@ -12,7 +12,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import Settings, get_settings
 from app.models.product.auth_challenge import AuthChallenge
-from app.models.user import User
 from app.services.oidc.authorization_service import create_authorization_code
 
 logger = logging.getLogger(__name__)
@@ -112,12 +111,12 @@ async def get_challenge_status(db: AsyncSession, challenge_id: str) -> dict | No
 async def _complete_challenge(
     db: AsyncSession,
     challenge: AuthChallenge,
-    user: User,
+    email: str,
 ) -> str:
     code = await create_authorization_code(
         db=db,
         client_id=challenge.client_id,
-        user_id=user.id,
+        email=email,
         redirect_uri=challenge.redirect_uri,
         scope=challenge.scope,
         nonce=challenge.nonce,
@@ -227,15 +226,7 @@ async def submit_challenge(
         logger.error("Certificate verification failed: %s", e)
         return {"error": "Certificate verification failed", "status_code": 400}
 
-    # Look up user
-    user_result = await db.execute(select(User).where(User.email == email))
-    user = user_result.scalar_one_or_none()
-    if not user:
-        return {"error": "User not found", "status_code": 400}
-    if not user.is_verified:
-        return {"error": "User not verified", "status_code": 400}
-
-    redirect_url = await _complete_challenge(db, challenge, user)
+    redirect_url = await _complete_challenge(db, challenge, email)
     return {"redirect_url": redirect_url}
 
 
@@ -273,16 +264,7 @@ async def submit_challenge_demo(
     if not challenge.login_hint:
         return {"error": "No login_hint on challenge", "status_code": 400}
 
-    user_result = await db.execute(
-        select(User).where(User.email == challenge.login_hint)
-    )
-    user = user_result.scalar_one_or_none()
-    if not user:
-        return {"error": "User not found", "status_code": 400}
-    if not user.is_verified:
-        return {"error": "User not verified", "status_code": 400}
-
-    redirect_url = await _complete_challenge(db, challenge, user)
+    redirect_url = await _complete_challenge(db, challenge, challenge.login_hint)
     return {"redirect_url": redirect_url}
 
 

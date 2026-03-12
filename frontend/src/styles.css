@@ -167,6 +167,65 @@ select.input {
   to { opacity: 1; transform: translateY(0) }
 }
 
+/* ── Info tooltip icon ── */
+.info-tip {
+  display: inline-flex;
+  color: #a1a1aa;
+  font-size: 0.8rem;
+  cursor: help;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .info-tip {
+  color: #a1a1aa;
+}
+
+/* ── Tippy tooltip overrides ── */
+.tippy-box[data-theme~='info'] {
+  background: #18181b;
+  color: #fafafa;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  border-radius: 0.625rem;
+  padding: 0.25rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  max-width: 320px !important;
+}
+.tippy-box[data-theme~='info'] .tippy-content {
+  padding: 0.625rem 0.875rem;
+}
+.tippy-box[data-theme~='info'] .tippy-arrow {
+  color: #18181b;
+}
+.tippy-box[data-theme~='info'] strong {
+  color: #fff;
+  font-weight: 600;
+}
+.tippy-box[data-theme~='info'] .tip-title {
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+.tippy-box[data-theme~='info'] .tip-desc {
+  color: #d4d4d8;
+  display: block;
+}
+.tippy-box[data-theme~='info'] .tip-list {
+  margin: 0.375rem 0 0 0;
+  padding: 0 0 0 1rem;
+  color: #d4d4d8;
+}
+.tippy-box[data-theme~='info'] .tip-list li {
+  margin-bottom: 0.25rem;
+}
+.tippy-box[data-theme~='info'] .tip-list li:last-child {
+  margin-bottom: 0;
+}
+
 /* ── Curtain Loader ── */
 .curtain-wrapper {
   position: fixed;

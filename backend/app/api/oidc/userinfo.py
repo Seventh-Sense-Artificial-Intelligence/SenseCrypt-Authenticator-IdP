@@ -1,9 +1,5 @@
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Header, HTTPException
 from fastapi.responses import JSONResponse
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.database import get_db
-from app.models.user import User
 from app.services.oidc.token_service import validate_access_token
 
 router = APIRouter()
@@ -15,10 +11,7 @@ def _extract_bearer_token(authorization: str | None) -> str | None:
     return authorization[7:]
 
 
-async def _handle_userinfo(
-    authorization: str | None,
-    db: AsyncSession,
-):
+async def _handle_userinfo(authorization: str | None):
     token = _extract_bearer_token(authorization)
     if not token:
         raise HTTPException(
@@ -43,39 +36,24 @@ async def _handle_userinfo(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    result = await db.execute(select(User).where(User.id == sub))
-    user = result.scalar_one_or_none()
-    if not user:
-        raise HTTPException(
-            status_code=401,
-            detail="User not found",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
     scope_str = payload.get("scope", "openid")
     scopes = set(scope_str.split())
 
-    claims: dict = {"sub": user.id}
+    claims: dict = {"sub": sub}
     if "profile" in scopes:
-        claims["name"] = user.full_name
+        claims["name"] = sub
     if "email" in scopes:
-        claims["email"] = user.email
-        claims["email_verified"] = user.is_verified
+        claims["email"] = sub
+        claims["email_verified"] = True
 
     return JSONResponse(content=claims)
 
 
 @router.get("/userinfo")
-async def userinfo_get(
-    authorization: str | None = Header(default=None),
-    db: AsyncSession = Depends(get_db),
-):
-    return await _handle_userinfo(authorization, db)
+async def userinfo_get(authorization: str | None = Header(default=None)):
+    return await _handle_userinfo(authorization)
 
 
 @router.post("/userinfo")
-async def userinfo_post(
-    authorization: str | None = Header(default=None),
-    db: AsyncSession = Depends(get_db),
-):
-    return await _handle_userinfo(authorization, db)
+async def userinfo_post(authorization: str | None = Header(default=None)):
+    return await _handle_userinfo(authorization)

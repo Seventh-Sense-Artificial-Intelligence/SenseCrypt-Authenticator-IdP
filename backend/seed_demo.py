@@ -13,9 +13,9 @@ from app.models.product.oauth_application import OAuthApplication
 from sqlalchemy import select
 
 
-TEST_EMAIL = "demo@sensecrypt.com"
-TEST_PASSWORD = "Demo1234!"
-TEST_NAME = "Demo User"
+IDP_EMAIL = "demo-idp@seventhsense.ai"
+IDP_PASSWORD = "Demo1234!"
+IDP_NAME = "Demo IdP Admin"
 
 DEMO_APP_NAME = "OIDC Demo Client"
 DEMO_REDIRECT_URI = "http://localhost:9000/callback"
@@ -23,29 +23,29 @@ DEMO_REDIRECT_URI = "http://localhost:9000/callback"
 
 async def seed():
     async with AsyncSessionLocal() as db:
-        # --- Test user ---
-        result = await db.execute(select(User).where(User.email == TEST_EMAIL))
-        user = result.scalar_one_or_none()
+        # --- IdP admin user (owns the OAuth application) ---
+        result = await db.execute(select(User).where(User.email == IDP_EMAIL))
+        idp_user = result.scalar_one_or_none()
 
-        if not user:
-            password_hash = bcrypt.hashpw(TEST_PASSWORD.encode(), bcrypt.gensalt()).decode()
-            user = User(
-                email=TEST_EMAIL,
+        if not idp_user:
+            password_hash = bcrypt.hashpw(IDP_PASSWORD.encode(), bcrypt.gensalt()).decode()
+            idp_user = User(
+                email=IDP_EMAIL,
                 password_hash=password_hash,
-                full_name=TEST_NAME,
+                full_name=IDP_NAME,
                 is_verified=True,
                 is_active=True,
             )
-            db.add(user)
+            db.add(idp_user)
             await db.flush()
-            print(f"Created test user: {TEST_EMAIL}")
+            print(f"Created IdP admin user: {IDP_EMAIL}")
         else:
-            print(f"Test user already exists: {TEST_EMAIL}")
+            print(f"IdP admin user already exists: {IDP_EMAIL}")
 
-        # --- Demo OAuth application ---
+        # --- Demo OAuth application (owned by IdP admin) ---
         result = await db.execute(
             select(OAuthApplication).where(
-                OAuthApplication.user_id == user.id,
+                OAuthApplication.user_id == idp_user.id,
                 OAuthApplication.name == DEMO_APP_NAME,
             )
         )
@@ -68,7 +68,7 @@ async def seed():
                 client_secret.encode(), bcrypt.gensalt()
             ).decode()
             app = OAuthApplication(
-                user_id=user.id,
+                user_id=idp_user.id,
                 name=DEMO_APP_NAME,
                 client_id=client_id,
                 client_secret_hash=client_secret_hash,
@@ -89,7 +89,7 @@ async def seed():
         print("=" * 60)
         print("  DEMO CREDENTIALS")
         print("=" * 60)
-        print(f"  User email:     {TEST_EMAIL}")
+        print(f"  IdP admin:      {IDP_EMAIL} / {IDP_PASSWORD}")
         print(f"  Client ID:      {app.client_id}")
         print(f"  Client Secret:  {client_secret}")
         print(f"  Redirect URI:   {DEMO_REDIRECT_URI}")

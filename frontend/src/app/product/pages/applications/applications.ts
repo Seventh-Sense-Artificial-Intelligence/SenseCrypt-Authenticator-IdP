@@ -15,6 +15,7 @@ export class Applications implements OnInit {
 
   applications = signal<OAuthApplication[]>([]);
   loading = signal(true);
+  copiedId = signal('');
 
   ngOnInit(): void {
     this.appService.list().subscribe({
@@ -36,9 +37,11 @@ export class Applications implements OnInit {
     this.router.navigate(['/dashboard/applications', id]);
   }
 
-  copyToClipboard(text: string, event: Event): void {
+  copyToClipboard(id: string, text: string, event: Event): void {
     event.stopPropagation();
     navigator.clipboard.writeText(text);
+    this.copiedId.set(id);
+    setTimeout(() => this.copiedId.set(''), 1500);
   }
 
   formatDate(dateStr: string): string {

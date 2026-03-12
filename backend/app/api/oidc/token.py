@@ -7,7 +7,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timezone
 from app.database import get_db
 from app.config import get_settings
-from app.models.user import User
 from app.models.product.refresh_token import OIDCRefreshToken
 from app.services.product.application_service import (
     get_application_by_client_id,
@@ -133,35 +132,24 @@ async def _handle_authorization_code(
                 content={"error": "invalid_client"},
             )
 
-    # Get the user
-    result = await db.execute(
-        select(User).where(User.id == auth_code.user_id)
-    )
-    user = result.scalar_one_or_none()
-    if not user:
-        return JSONResponse(
-            status_code=400,
-            content={"error": "invalid_grant"},
-        )
-
     scopes = set(auth_code.scope.split()) if auth_code.scope else {"openid"}
 
     id_token = create_id_token(
-        user=user,
+        email=auth_code.email,
         client_id=client_id,
         nonce=auth_code.nonce,
         scopes=scopes,
         settings=settings,
     )
     access_token = create_oidc_access_token(
-        user_id=user.id,
+        email=auth_code.email,
         client_id=client_id,
         scopes=scopes,
         settings=settings,
     )
     rt = await create_refresh_token(
         db=db,
-        user_id=user.id,
+        email=auth_code.email,
         client_id=client_id,
         scope=auth_code.scope or "openid",
     )
@@ -234,28 +222,17 @@ async def _handle_refresh_token(
             content={"error": "invalid_grant"},
         )
 
-    # Get user
-    result = await db.execute(
-        select(User).where(User.id == matched_token.user_id)
-    )
-    user = result.scalar_one_or_none()
-    if not user:
-        return JSONResponse(
-            status_code=400,
-            content={"error": "invalid_grant"},
-        )
-
     scopes = set(matched_token.scope.split()) if matched_token.scope else {"openid"}
 
     id_token = create_id_token(
-        user=user,
+        email=matched_token.email,
         client_id=client_id,
         nonce=None,
         scopes=scopes,
         settings=settings,
     )
     access_token = create_oidc_access_token(
-        user_id=user.id,
+        email=matched_token.email,
         client_id=client_id,
         scopes=scopes,
         settings=settings,

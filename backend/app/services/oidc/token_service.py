@@ -4,13 +4,12 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import Settings
-from app.models.user import User
 from app.models.product.refresh_token import OIDCRefreshToken
 from app.services.oidc.keys import sign_jwt, get_public_key
 
 
 def create_id_token(
-    user: User,
+    email: str,
     client_id: str,
     nonce: str | None,
     scopes: set[str],
@@ -19,7 +18,7 @@ def create_id_token(
     now = datetime.now(timezone.utc)
     payload: dict = {
         "iss": settings.OIDC_ISSUER_URL,
-        "sub": user.id,
+        "sub": email,
         "aud": client_id,
         "exp": now + timedelta(minutes=settings.OIDC_ID_TOKEN_EXPIRE_MINUTES),
         "iat": now,
@@ -27,15 +26,15 @@ def create_id_token(
     if nonce:
         payload["nonce"] = nonce
     if "email" in scopes:
-        payload["email"] = user.email
-        payload["email_verified"] = user.is_verified
+        payload["email"] = email
+        payload["email_verified"] = True
     if "profile" in scopes:
-        payload["name"] = user.full_name
+        payload["name"] = email
     return sign_jwt(payload)
 
 
 def create_oidc_access_token(
-    user_id: str,
+    email: str,
     client_id: str,
     scopes: set[str],
     settings: Settings,
@@ -43,7 +42,7 @@ def create_oidc_access_token(
     now = datetime.now(timezone.utc)
     payload = {
         "iss": settings.OIDC_ISSUER_URL,
-        "sub": user_id,
+        "sub": email,
         "aud": client_id,
         "exp": now + timedelta(minutes=settings.OIDC_ACCESS_TOKEN_EXPIRE_MINUTES),
         "iat": now,
@@ -53,7 +52,7 @@ def create_oidc_access_token(
 
 
 async def create_refresh_token(
-    db: AsyncSession, user_id: str, client_id: str, scope: str
+    db: AsyncSession, email: str, client_id: str, scope: str
 ) -> str:
     raw_token = secrets.token_urlsafe(48)
     token_hash = hashlib.sha256(raw_token.encode()).hexdigest()
@@ -62,7 +61,7 @@ async def create_refresh_token(
     refresh_token = OIDCRefreshToken(
         token_hash=token_hash,
         client_id=client_id,
-        user_id=user_id,
+        email=email,
         scope=scope,
         expires_at=expires_at,
     )

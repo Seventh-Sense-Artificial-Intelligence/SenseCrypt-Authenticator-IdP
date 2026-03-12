@@ -88,16 +88,22 @@
       <form (ngSubmit)="submit()">
         <!-- Name -->
         <div class="mb-5">
-          <label for="app-name" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Application Name</label>
+          <label for="app-name" class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            Application Name
+            <info-tip [content]="tips.name" />
+          </label>
           <input id="app-name" type="text" [(ngModel)]="name" name="name" class="input" placeholder="My Application" />
         </div>
 
         <!-- Application Type -->
         <div class="mb-5">
-          <label for="app-type" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Application Type</label>
+          <label for="app-type" class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            Application Type
+            <info-tip [content]="tips.type" />
+          </label>
           <select id="app-type" [(ngModel)]="applicationType" name="applicationType" class="input">
             <option value="web">Web</option>
-            <option value="spa">SPA (Single Page Application)</option>
+            <option value="spa">Single Page Application (SPA)</option>
             <option value="native">Native</option>
             <option value="machine_to_machine">Machine to Machine</option>
           </select>
@@ -105,7 +111,10 @@
 
         <!-- Redirect URIs -->
         <div class="mb-5">
-          <label for="redirect-uris" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Redirect URIs</label>
+          <label for="redirect-uris" class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            Redirect URIs
+            <info-tip [content]="tips.redirectUris" />
+          </label>
           <textarea id="redirect-uris" [(ngModel)]="redirectUris" name="redirectUris" class="input" rows="3"
                     placeholder="https://example.com/callback"></textarea>
           <p class="text-xs text-zinc-400 mt-1.5">One URI per line</p>
@@ -113,7 +122,10 @@
 
         <!-- Post Logout Redirect URIs -->
         <div class="mb-5">
-          <label for="logout-uris" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Post Logout Redirect URIs</label>
+          <label for="logout-uris" class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            Post-Logout Redirect URIs
+            <info-tip [content]="tips.postLogoutRedirectUris" />
+          </label>
           <textarea id="logout-uris" [(ngModel)]="postLogoutRedirectUris" name="postLogoutRedirectUris" class="input" rows="2"
                     placeholder="https://example.com/logout (optional)"></textarea>
           <p class="text-xs text-zinc-400 mt-1.5">One URI per line (optional)</p>
@@ -121,55 +133,64 @@
 
         <!-- Scopes -->
         <div class="mb-5">
-          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Allowed Scopes</label>
+          <label class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+            Allowed Scopes
+            <info-tip [content]="tips.scopes" />
+          </label>
           <div class="flex flex-wrap gap-3">
             <label class="flex items-center gap-2 text-sm text-zinc-500 [body[data-theme=dark]_&]:text-zinc-400 cursor-not-allowed">
               <input type="checkbox" [checked]="true" disabled
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              openid
+              OpenID
             </label>
             <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
               <input type="checkbox" [checked]="hasScope('profile')" (change)="toggleScope('profile')"
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              profile
+              Profile
             </label>
             <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
               <input type="checkbox" [checked]="hasScope('email')" (change)="toggleScope('email')"
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              email
+              Email
             </label>
           </div>
         </div>
 
         <!-- Grant Types -->
         <div class="mb-5">
-          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Grant Types</label>
+          <label class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+            Grant Types
+            <info-tip [content]="tips.grantTypes" />
+          </label>
           <div class="flex flex-wrap gap-3">
             <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
               <input type="checkbox" [checked]="hasGrantType('authorization_code')" (change)="toggleGrantType('authorization_code')"
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              authorization_code
+              Authorization Code
             </label>
             <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
               <input type="checkbox" [checked]="hasGrantType('refresh_token')" (change)="toggleGrantType('refresh_token')"
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              refresh_token
+              Refresh Token
             </label>
             <label class="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer [body[data-theme=dark]_&]:text-zinc-300">
               <input type="checkbox" [checked]="hasGrantType('client_credentials')" (change)="toggleGrantType('client_credentials')"
                      class="w-4 h-4 rounded border-zinc-300 text-brand focus:ring-brand accent-brand" />
-              client_credentials
+              Client Credentials
             </label>
           </div>
         </div>
 
         <!-- Token Endpoint Auth Method -->
         <div class="mb-6">
-          <label for="auth-method" class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Token Endpoint Auth Method</label>
+          <label for="auth-method" class="flex items-center gap-1.5 text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+            Token Endpoint Auth Method
+            <info-tip [content]="tips.authMethod" />
+          </label>
           <select id="auth-method" [(ngModel)]="tokenEndpointAuthMethod" name="tokenEndpointAuthMethod" class="input">
-            <option value="client_secret_post">client_secret_post</option>
-            <option value="client_secret_basic">client_secret_basic</option>
-            <option value="none">none</option>
+            <option value="client_secret_post">Client Secret (POST)</option>
+            <option value="client_secret_basic">Client Secret (Basic)</option>
+            <option value="none">None (Public Client)</option>
           </select>
         </div>
 

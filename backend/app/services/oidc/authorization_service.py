@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 async def create_authorization_code(
     db: AsyncSession,
     client_id: str,
-    user_id: str,
+    email: str,
     redirect_uri: str,
     scope: str,
     nonce: str | None,
@@ -31,7 +31,7 @@ async def create_authorization_code(
     auth_code = AuthorizationCode(
         code=code,
         client_id=client_id,
-        user_id=user_id,
+        email=email,
         redirect_uri=redirect_uri,
         scope=scope,
         nonce=nonce,

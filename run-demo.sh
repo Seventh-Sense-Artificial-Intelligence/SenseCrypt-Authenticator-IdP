@@ -17,6 +17,16 @@ echo "  Sensecrypt Authenticator — OIDC Demo"
 echo "============================================"
 echo ""
 
+# ── 0. Kill any existing servers on ports 8000 and 9000 ──
+for port in 8000 9000; do
+  pids=$(lsof -ti :"$port" 2>/dev/null || true)
+  if [ -n "$pids" ]; then
+    echo "==> Killing existing processes on port $port..."
+    echo "$pids" | xargs kill 2>/dev/null || true
+    sleep 1
+  fi
+done
+
 # ── 1. Ensure backend .env ──
 if [ ! -f "$BACKEND_DIR/.env" ]; then
   echo "==> Creating backend/.env ..."
@@ -31,11 +41,11 @@ OIDC_ISSUER_URL=http://localhost:8000
 EOF
 fi
 
-# ── 2. Ensure database exists ──
-if ! psql -U "$DB_USER" -d "$DB_NAME" -tAc "SELECT 1" &>/dev/null; then
-  echo "==> Creating database $DB_NAME..."
-  createdb -O "$DB_USER" "$DB_NAME" 2>/dev/null || true
-fi
+# ── 2. Drop and recreate database ──
+echo "==> Resetting database $DB_NAME..."
+psql -U "$DB_USER" -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$DB_NAME' AND pid <> pg_backend_pid();" &>/dev/null || true
+dropdb -U "$DB_USER" --if-exists "$DB_NAME"
+createdb -O "$DB_USER" "$DB_NAME"
 
 # ── 3. Frontend build ──
 echo "==> Building frontend..."
@@ -89,7 +99,8 @@ echo "  Starting servers..."
 echo "  IdP:  http://localhost:8000"
 echo "  Demo: http://localhost:9000"
 echo "============================================"
-echo "  Login:  Click the QR code on the IdP login page"
+echo "  IdP admin:  demo-idp@seventhsense.ai / Demo1234!"
+echo "  IdP login:  http://localhost:8000"
 echo "============================================"
 echo ""
 

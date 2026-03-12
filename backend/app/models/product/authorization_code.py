@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from typing import Optional
-from sqlalchemy import String, Boolean, DateTime, ForeignKey, func
+from sqlalchemy import String, Boolean, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -14,9 +14,7 @@ class AuthorizationCode(Base):
     )
     code: Mapped[str] = mapped_column(String(128), unique=True, index=True)
     client_id: Mapped[str] = mapped_column(String(64), index=True)
-    user_id: Mapped[str] = mapped_column(
-        String(36), ForeignKey("users.id", ondelete="CASCADE")
-    )
+    email: Mapped[str] = mapped_column(String(255))
     redirect_uri: Mapped[str] = mapped_column(String(2048))
     scope: Mapped[str] = mapped_column(String(512))
     nonce: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
