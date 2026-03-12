@@ -126,6 +126,14 @@ async def forgot_password(data: ForgotPassword, db: AsyncSession = Depends(get_d
         base = get_settings().BASE_URL.rstrip("/")
         reset_url = f"{base}/?resetToken={token}"
         send_password_reset_email(user.email, reset_url)
+    elif user and not user.is_verified:
+        token = create_verification_token(user.id)
+        user.verification_token = token
+        user.verification_token_expires_at = datetime.now(timezone.utc) + timedelta(
+            hours=VERIFICATION_EXPIRY_HOURS
+        )
+        await db.commit()
+        send_verification_email(user.email, _build_verification_url(token))
     return {"message": "If an account exists, a reset email has been sent"}
 
 
